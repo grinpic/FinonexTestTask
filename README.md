@@ -25,7 +25,7 @@ npm run test:matrix
 
 This runs all three tests sequentially on **iPhone 17 / iOS 26**, **iPhone 15 Pro / iOS 17** and **iPhone 17 Pro Max / iOS 26**. BrowserStack selects the available patch version.
 
-`exercise.env` includes the dedicated exercise account's API credentials and uploaded app ID. It is intentionally included in this **private repository**. Keep the repository private while these credentials remain active. The Google sign-in password is not needed. Execution requires remaining BrowserStack minutes, an active account and an available uploaded app.
+`exercise.env` includes the dedicated exercise account's API credentials and uploaded app ID. It is intentionally included in this **private repository**. Keep the repository private while these credentials remain active. The Google sign-in password is not needed for test execution. Reviewers can use the [dashboard login instructions](docs/REVIEWER_ACCESS.md) to inspect results and videos. Execution requires remaining BrowserStack minutes, an active account and an available uploaded app.
 
 To use another account, copy `.env.example` to `.env` and fill in its values. Local `.env` and shell variables take priority over `exercise.env`.
 
