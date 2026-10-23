@@ -1,4 +1,8 @@
 import 'dotenv/config';
+import { config } from 'dotenv';
+
+// Dedicated exercise account. Local .env and process variables take priority.
+config({ path: new URL('../exercise.env', import.meta.url) });
 
 function required(name: string): string {
   const value = process.env[name]?.trim();
