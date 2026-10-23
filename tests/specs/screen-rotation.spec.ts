@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { browser } from '@wdio/globals';
-import { LoginScreen } from '../screens/login.screen.js';
 import { SideMenu } from '../components/side-menu.js';
 import { saveEvidence } from '../support/evidence.js';
 
@@ -16,8 +15,6 @@ describe('About — screen rotation', () => {
   });
 
   it('rotates About to landscape and keeps its content and controls usable', async () => {
-    await browser.setOrientation('PORTRAIT');
-    await new LoginScreen().signInAsStandardUser();
     const about = await new SideMenu().openAbout();
     const portrait = await about.layout();
     assert.ok(

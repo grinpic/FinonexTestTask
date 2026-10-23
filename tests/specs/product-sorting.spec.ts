@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
-import { LoginScreen } from '../screens/login.screen.js';
+import { ProductsScreen } from '../screens/products.screen.js';
 
 const catalogSizeInRelease271 = 6;
 
 describe('Products — sorting', () => {
   it('displays the complete catalog in ascending price order', async () => {
-    const products = await new LoginScreen().signInAsStandardUser();
+    const products = new ProductsScreen();
     const before = await products.readEntireCatalog();
     assert.equal(
       before.length,

@@ -49,7 +49,10 @@ All nine device/scenario combinations have successful results across several run
 
 - `tests/specs/`: the three scenarios and assertions.
 - `tests/screens/`, `tests/components/`: Screen Objects and shared navigation.
-- `tests/support/`: screenshot comparison, prices and evidence.
+- `tests/support/`: shared session setup, screenshot comparison, prices and evidence.
+
+Before each spec, the shared WebdriverIO `before` hook sets portrait, signs in and waits for Products. Each spec has one scenario and a fresh Appium session. The scenario then performs only its own navigation, actions and assertions. Adding multiple tests to one spec requires explicit state isolation.
+
 - `config/`: cloud, simulator and device settings.
 
 [Detailed guide and simulator setup](docs/PROJECT_GUIDE_RU.md) · [Device matrix](docs/DEVICE_MATRIX_RU.md) · [Presentation](deliverables/Finonex-iOS-Automation-RU.pptx)

@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { browser } from '@wdio/globals';
-import { LoginScreen } from '../screens/login.screen.js';
 import { SideMenu } from '../components/side-menu.js';
 import { compareImages } from '../support/image-comparison.js';
 import { saveEvidence } from '../support/evidence.js';
@@ -10,7 +9,6 @@ describe('Drawing — clear canvas', () => {
     // Cloud transfers of Retina screenshots can take tens of seconds each.
     // Keep element and Clear assertion deadlines unchanged.
     this.timeout(300000);
-    await new LoginScreen().signInAsStandardUser();
     const drawing = await new SideMenu().openDrawing();
     const before = await drawing.captureStableCanvas();
     await saveEvidence('canvas-before.png', before);
