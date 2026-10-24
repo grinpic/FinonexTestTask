@@ -39,9 +39,26 @@ npm run test:rotation     # Rotation only
 npm run check             # Types, formatting and unit tests; no cloud minutes
 ```
 
+## BrowserStack login
+
+1. Open [BrowserStack sign in](https://www.browserstack.com/users/sign_in).
+2. Choose **Sign in with Google** and select **Use another account** if your personal account is already signed in.
+3. Use the dedicated Google account from [Reviewer Access](docs/REVIEWER_ACCESS.md), which contains the email and password. Do not enter this password into the BrowserStack email/password form.
+4. Open [App Automate](https://app-automate.browserstack.com/).
+
+Google may request verification on a new device. Contact the account owner if prompted. Dashboard sign-in is only needed to inspect results; command-line tests authenticate automatically with the API credentials in `exercise.env`.
+
 ## Results
 
-The terminal displays pass/fail results. BrowserStack App Automate provides session logs and videos. Local screenshots and diagnostic files appear in `artifacts/`.
+In App Automate, open the build and select an individual test session:
+
+- **Status:** Passed / Failed, device and iOS version.
+- **Video:** the session page contains the recording player.
+- **Logs:** inspect Appium logs and the command timeline for requests, responses and errors.
+
+The final verification build is named `finonex-final-2026-10-24`. New runs use `finonex-ios-suite` unless `BROWSERSTACK_BUILD_NAME` is overridden. A running build is not a completed result.
+
+The terminal displays Mocha assertions and the summary. Local screenshots, image comparisons and failure XML are saved in `artifacts/`; WebdriverIO logs are in `artifacts/logs/`.
 
 All nine device/scenario combinations have successful results across several runs: [sessions and videos](docs/BROWSERSTACK_RESULTS_RU.md). These are recorded results, not a guarantee of a new run while trial access or the external website changes.
 
@@ -51,9 +68,8 @@ All nine device/scenario combinations have successful results across several run
 - `tests/assertions/`: catalog, canvas and layout checks with diagnostic evidence.
 - `tests/screens/`, `tests/components/`: Screen Objects and shared navigation.
 - `tests/support/`: screenshot comparison, prices and evidence.
+- `config/`: cloud, simulator and device settings.
 
 Each suite explicitly signs in through its own named Mocha `before` hook. The runner does not log in automatically, so future login or guest tests can define different preconditions. Each current spec has one scenario and a fresh Appium session. Multiple tests in one suite share state: define their reset strategy explicitly before adding them. Initial portrait orientation is configured in capabilities.
-
-- `config/`: cloud, simulator and device settings.
 
 [Detailed guide and simulator setup](docs/PROJECT_GUIDE_RU.md) · [Device matrix](docs/DEVICE_MATRIX_RU.md) · [Presentation](deliverables/Finonex-iOS-Automation-RU.pptx)
