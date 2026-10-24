@@ -47,7 +47,8 @@ All nine device/scenario combinations have successful results across several run
 
 ## Project structure
 
-- `tests/specs/`: the three scenarios and assertions.
+- `tests/specs/`: short scenarios with user actions and named checks.
+- `tests/assertions/`: catalog, canvas and layout checks with diagnostic evidence.
 - `tests/screens/`, `tests/components/`: Screen Objects and shared navigation.
 - `tests/support/`: shared session setup, screenshot comparison, prices and evidence.
 
