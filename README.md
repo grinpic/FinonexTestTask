@@ -60,7 +60,7 @@ The final verification build is named `finonex-final-2026-10-24`. New runs use `
 
 The terminal displays Mocha assertions and the summary. Local screenshots, image comparisons and failure XML are saved in `artifacts/`; WebdriverIO logs are in `artifacts/logs/`.
 
-All nine device/scenario combinations have successful results across several runs: [sessions and videos](docs/BROWSERSTACK_RESULTS_RU.md). These are recorded results, not a guarantee of a new run while trial access or the external website changes.
+The final run on 24 October 2026 passed all nine device/scenario combinations in one build (15m 03s): [sessions and videos](docs/BROWSERSTACK_RESULTS_RU.md). These are recorded results, not a guarantee of a new run while trial access or the external website changes.
 
 ## Project structure
 
