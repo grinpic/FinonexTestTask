@@ -1,6 +1,8 @@
 import { $, browser } from '@wdio/globals';
 import { parsePrice } from '../support/price.js';
 
+const MAX_SCROLLS = 15;
+
 export interface Product {
   name: string;
   priceCents: number;
@@ -39,41 +41,51 @@ export class ProductsScreen {
     await this.waitForLoaded();
   }
 
-  /** Read visual grid order (top-to-bottom, left-to-right), including off-screen rows. */
   async readEntireCatalog(): Promise<Product[]> {
-    const products = new Map<string, Product>();
-    for (let scroll = 0; scroll <= 15; scroll++) {
-      const visible: Array<Product & { x: number; y: number }> = [];
-      for (const card of await this.list.$$('~test-Item')) {
-        const price = card.$('~test-Price');
-        // Use price visibility: the title can be above the viewport on shorter iPhones.
-        if (!(await price.isDisplayed())) continue;
-        const name = (await card.$('~test-Item title').getText()).trim();
-        if (!name) throw new Error('A product has an empty title');
-        const location = await card.getLocation();
-        visible.push({
-          name,
-          priceCents: parsePrice(await price.getText()),
-          ...location,
-        });
-      }
-      visible.sort((a, b) => a.y - b.y || a.x - b.x);
-      for (const { name, priceCents } of visible) {
-        const previous = products.get(name);
-        if (previous && previous.priceCents !== priceCents) {
-          throw new Error(`Price changed while reading ${name}`);
-        }
-        products.set(name, { name, priceCents });
-      }
-      if (await this.footer.isDisplayed()) return [...products.values()];
-      if (scroll < 15) {
-        // Half-page gestures retain overlap; bounded traversal cannot silently pass on a stuck list.
-        await this.swipe('up');
-      }
+    const catalog = new Map<string, Product>();
+    for (let scroll = 0; scroll <= MAX_SCROLLS; scroll++) {
+      const visibleProducts = await this.readVisibleProducts();
+      this.mergeProducts(catalog, visibleProducts);
+
+      if (await this.footer.isDisplayed()) return [...catalog.values()];
+      if (scroll < MAX_SCROLLS) await this.swipe('up');
     }
     throw new Error(
-      `Catalog footer not reached after 15 swipes; collected ${products.size} products`,
+      `Catalog footer not reached after ${MAX_SCROLLS} swipes; collected ${catalog.size} products`,
     );
+  }
+
+  private async readVisibleProducts(): Promise<Product[]> {
+    const visible: Array<Product & { x: number; y: number }> = [];
+    for (const card of await this.list.$$('~test-Item')) {
+      const price = card.$('~test-Price');
+      // A visible price can belong to a card whose title is above the viewport.
+      if (!(await price.isDisplayed())) continue;
+      const name = (await card.$('~test-Item title').getText()).trim();
+      if (!name) throw new Error('A product has an empty title');
+      const location = await card.getLocation();
+      visible.push({
+        name,
+        priceCents: parsePrice(await price.getText()),
+        ...location,
+      });
+    }
+    return visible
+      .sort((a, b) => a.y - b.y || a.x - b.x)
+      .map(({ name, priceCents }) => ({ name, priceCents }));
+  }
+
+  private mergeProducts(
+    catalog: Map<string, Product>,
+    products: Product[],
+  ): void {
+    for (const product of products) {
+      const previous = catalog.get(product.name);
+      if (previous && previous.priceCents !== product.priceCents) {
+        throw new Error(`Price changed while reading ${product.name}`);
+      }
+      catalog.set(product.name, product);
+    }
   }
 
   private async swipe(direction: 'up' | 'down'): Promise<void> {
