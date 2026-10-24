@@ -1,4 +1,3 @@
-import { prepareSession } from '../tests/support/session-setup.js';
 import { captureFailure } from '../tests/support/artifacts.js';
 
 export const sharedConfig = {
@@ -15,8 +14,15 @@ export const sharedConfig = {
   connectionRetryCount: 1,
   specFileRetries: 0,
   mochaOpts: { ui: 'bdd', timeout: 180000, retries: 0 },
-  // Each spec contains one scenario and receives a fresh Appium session.
-  before: prepareSession,
+  afterHook: async (_hook, _context, { error }) => {
+    if (error) {
+      try {
+        await captureFailure('hook-failure');
+      } catch (captureError) {
+        console.warn('Hook artifact collection failed:', captureError);
+      }
+    }
+  },
   afterTest: async (test, _context, { passed }) => {
     if (!passed) {
       try {

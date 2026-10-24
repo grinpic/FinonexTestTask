@@ -1,3 +1,4 @@
+import { LoginScreen } from '../screens/login.screen.js';
 import { ProductsScreen } from '../screens/products.screen.js';
 import {
   expectCompleteCatalog,
@@ -6,6 +7,10 @@ import {
 } from '../assertions/products.assertions.js';
 
 describe('Products — sorting', () => {
+  before('Sign in as standard user', async () => {
+    await new LoginScreen().signInAsStandardUser();
+  });
+
   it('displays the complete catalog in ascending price order', async () => {
     const products = new ProductsScreen();
     const before = await products.readEntireCatalog();

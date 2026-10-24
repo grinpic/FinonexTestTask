@@ -1,3 +1,4 @@
+import { LoginScreen } from '../screens/login.screen.js';
 import { SideMenu } from '../components/side-menu.js';
 import {
   capturePortraitLayout,
@@ -7,6 +8,10 @@ import {
 import { rotateToLandscape, restoreAppInPortrait } from '../support/device.js';
 
 describe('About — screen rotation', () => {
+  before('Sign in as standard user', async () => {
+    await new LoginScreen().signInAsStandardUser();
+  });
+
   afterEach(restoreAppInPortrait);
 
   it('rotates About to landscape and keeps its content and controls usable', async () => {

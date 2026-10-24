@@ -50,9 +50,9 @@ All nine device/scenario combinations have successful results across several run
 - `tests/specs/`: short scenarios with user actions and named checks.
 - `tests/assertions/`: catalog, canvas and layout checks with diagnostic evidence.
 - `tests/screens/`, `tests/components/`: Screen Objects and shared navigation.
-- `tests/support/`: shared session setup, screenshot comparison, prices and evidence.
+- `tests/support/`: screenshot comparison, prices and evidence.
 
-Before each spec, the shared WebdriverIO `before` hook sets portrait, signs in and waits for Products. Each spec has one scenario and a fresh Appium session. The scenario then performs only its own navigation, actions and assertions. Adding multiple tests to one spec requires explicit state isolation.
+Each suite explicitly signs in through its own named Mocha `before` hook. The runner does not log in automatically, so future login or guest tests can define different preconditions. Each current spec has one scenario and a fresh Appium session. Multiple tests in one suite share state: define their reset strategy explicitly before adding them. Initial portrait orientation is configured in capabilities.
 
 - `config/`: cloud, simulator and device settings.
 
